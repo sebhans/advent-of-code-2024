@@ -1,3 +1,11 @@
+function parse_numbers(s)
+  local numbers = {}
+  for n in string.gmatch(s, "%d+") do
+    numbers[#numbers + 1] = n
+  end
+  return numbers
+end
+
 function kind(previous, current)
   if previous == current then
     return 'unsafe'
@@ -10,27 +18,24 @@ function kind(previous, current)
   end
 end
 
+function is_safe(report)
+  local report_kind = nil
+  for i = 2, #report do
+    local kind = kind(report[i - 1], report[i])
+    if kind == 'unsafe' then
+      return false
+    end
+    if report_kind and kind ~= report_kind then
+      return false
+    end
+    report_kind = kind
+  end
+  return true
+end
+
 local safe_count = 0
 for line in io.lines('input/day2.txt') do
-  local report_kind = nil
-  local previous = nil
-  local safe = true
-  for level in string.gmatch(line, "%d+") do
-    if previous then
-      local kind = kind(previous, level)
-      if kind == 'unsafe' then
-        safe = false
-        break
-      end
-      if report_kind and kind ~= report_kind then
-        safe = false
-        break
-      end
-      report_kind = kind
-    end
-    previous = level
-  end
-  if safe then
+  if is_safe(parse_numbers(line)) then
     safe_count = safe_count + 1
   end
 end
