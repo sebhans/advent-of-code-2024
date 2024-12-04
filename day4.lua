@@ -54,14 +54,34 @@ function diagonals(input)
   return diagonals
 end
 
-local total = 0
-total = total + count_XMAS(input)
-total = total + count_XMAS(flip_horizontally(input))
-total = total + count_XMAS(transpose(input))
-total = total + count_XMAS(flip_horizontally(transpose(input)))
-total = total + count_XMAS(diagonals(input))
-total = total + count_XMAS(flip_horizontally(diagonals(input)))
-total = total + count_XMAS(diagonals(flip_horizontally(input)))
-total = total + count_XMAS(flip_horizontally(diagonals(flip_horizontally(input))))
+local xmas_total = 0
+xmas_total = xmas_total + count_XMAS(input)
+xmas_total = xmas_total + count_XMAS(flip_horizontally(input))
+xmas_total = xmas_total + count_XMAS(transpose(input))
+xmas_total = xmas_total + count_XMAS(flip_horizontally(transpose(input)))
+xmas_total = xmas_total + count_XMAS(diagonals(input))
+xmas_total = xmas_total + count_XMAS(flip_horizontally(diagonals(input)))
+xmas_total = xmas_total + count_XMAS(diagonals(flip_horizontally(input)))
+xmas_total = xmas_total + count_XMAS(flip_horizontally(diagonals(flip_horizontally(input))))
 
-print(total)
+print(xmas_total)
+
+function count_X_MAS(input)
+  local count = 0
+  for i = 2, #input[1] - 1 do
+    for j = 2, #input - 1 do
+      if input[j]:sub(i, i) == "A" then
+        if input[j-1]:sub(i-1, i-1) == "M" and input[j+1]:sub(i+1, i+1) == "S"
+          or input[j-1]:sub(i-1, i-1) == "S" and input[j+1]:sub(i+1, i+1) == "M" then
+          if input[j-1]:sub(i+1, i+1) == "M" and input[j+1]:sub(i-1, i-1) == "S"
+            or input[j-1]:sub(i+1, i+1) == "S" and input[j+1]:sub(i-1, i-1) == "M" then
+            count = count + 1
+          end
+        end
+      end
+    end
+  end
+  return count
+end
+
+print(count_X_MAS(input))
