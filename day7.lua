@@ -30,3 +30,22 @@ local function calibrate(is_possible)
 end
 
 print(calibrate(is_possible))
+
+local function is_possible_with_concatenation(test_value, n, operands, i)
+  if i > #operands then
+    return n == test_value
+  end
+  local m = operands[i] + 0
+  if is_possible_with_concatenation(test_value, n + m, operands, i + 1) then
+    return true
+  end
+  if is_possible_with_concatenation(test_value, n * m, operands, i + 1) then
+    return true
+  end
+  if is_possible_with_concatenation(test_value, (n .. m) + 0, operands, i + 1) then
+    return true
+  end
+  return false
+end
+
+print(calibrate(is_possible_with_concatenation))
