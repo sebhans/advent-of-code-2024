@@ -23,7 +23,9 @@ local antennas, width, height = read_input()
 local function add_antinode(antinodes, x, y)
   if x > 0 and x <= width and y > 0 and y <= height then
     antinodes[x .. "," .. y] = true
+    return true
   end
+  return false
 end
 
 local function count_keys(t)
@@ -49,3 +51,24 @@ for _, coordinates in pairs(antennas) do
 end
 
 print(count_keys(antinodes))
+
+local all_antinodes = {}
+for _, coordinates in pairs(antennas) do
+  for i = 1, #coordinates - 1 do
+    local a1x, a1y = table.unpack(coordinates[i])
+    for j = i + 1, #coordinates do
+      local a2x, a2y = table.unpack(coordinates[j])
+      local dx, dy = a1x - a2x,  a1y - a2y
+      local ex, ey = 0, 0
+      while add_antinode(all_antinodes, a1x + ex, a1y + ey) do
+        ex, ey = ex + dx, ey + dy
+      end
+      ex, ey = 0, 0
+      while add_antinode(all_antinodes, a2x - ex, a2y - ey) do
+        ex, ey = ex + dx, ey + dy
+      end
+    end
+  end
+end
+
+print(count_keys(all_antinodes))
