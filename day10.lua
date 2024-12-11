@@ -80,3 +80,30 @@ for x, y in trailheads(map, width, height) do
 end
 
 print(total_score)
+
+local function rating(map, width, height, x, y, h)
+  local function at(x, y)
+    if x <= 0 or x > width or y <= 0 or y > height then
+      return -1
+    end
+    return map[y][x]
+  end
+
+  if h == 9 then
+    return 1
+  end
+
+  local r = 0
+  if at(x - 1, y) == h + 1 then r = r + rating(map, width, height, x - 1, y, h + 1) end
+  if at(x + 1, y) == h + 1 then r = r + rating(map, width, height, x + 1, y, h + 1) end
+  if at(x, y - 1) == h + 1 then r = r + rating(map, width, height, x, y - 1, h + 1) end
+  if at(x, y + 1) == h + 1 then r = r + rating(map, width, height, x, y + 1, h + 1) end
+  return r
+end
+
+local total_rating = 0
+for x, y in trailheads(map, width, height) do
+  total_rating = total_rating + rating(map, width, height, x, y, 0)
+end
+
+print(total_rating)
