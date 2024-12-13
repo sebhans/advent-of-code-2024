@@ -20,4 +20,21 @@ function M.read_matrix(filename)
   return matrix
 end
 
+function M.read_paragraphs(filename, f)
+  local paragraph = nil
+  for line in io.lines(filename) do
+    if line == '' then
+      f(paragraph)
+      paragraph = nil
+    elseif not paragraph then
+      paragraph = line
+    else
+      paragraph = paragraph .. "\n" .. line
+    end
+  end
+  if paragraph then
+    f(paragraph)
+  end
+end
+
 return M
