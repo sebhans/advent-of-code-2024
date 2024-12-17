@@ -8,6 +8,14 @@ function M.extract(s, pattern)
   return parts
 end
 
+function M.split(s, separator)
+  local parts = {}
+  for part in s:gmatch("([^" .. separator .. "]+)") do
+    parts[#parts + 1] = part
+  end
+  return parts
+end
+
 function M.starts_with(s, prefix)
   if #s < #prefix then
     return false

@@ -118,4 +118,82 @@ function M.empty_matrix_map(width, height, tile)
   return M.matrix_map(map)
 end
 
+local sparse_map_methods = {
+  width = function(self) return self._width end,
+  height = function(self) return self._height end,
+
+  add = function(self, x, y, object)
+    local row = self[y]
+    if not row then
+      row = {}
+      self[y] = row
+    end
+    row[x] = object
+  end,
+
+  at = function(self, x, y)
+    if not y then
+      if type(x) == "string" then return self:at_key(x)
+      elseif type(x) == "number" then return nil
+      else return self:at_coord(x)
+      end
+    elseif x < self._left or y < self._top or x >= self._left + self._width or y >= self._top + self._height then return nil
+    elseif self[y] then return self[y][x]
+    else return nil
+    end
+  end,
+
+  at_coord = function(self, c) return self:at(c.x, c.y) end,
+  at_key = function(self, key) return self:at(M.coord(key)) end,
+
+  print = function(self, render)
+    for y = self._top, self._top + self._height - 1 do
+      for x = self._left, self._left + self._width - 1 do
+        if self[y] and self[y][x] then
+          if render then
+            io.write(render(self[y][x]))
+          else
+            io.write(self[y][x])
+          end
+        else
+          io.write(" ")
+        end
+      end
+      print()
+    end
+  end,
+
+  tostring = function(self, render)
+    local s = ""
+    for y = self._top, self._top + self._height - 1 do
+      for x = self._left, self._left + self._width - 1 do
+        if self[y] and self[y][x] then
+          if render then
+            s = s .. render(self[y][x])
+          else
+            s = s .. self[y][x]
+          end
+        else
+          s = s .. " "
+        end
+      end
+      s = s .. "\n"
+    end
+    return s
+  end,
+}
+
+local sparse_map_meta = {
+  __index = function(map, key)
+    return map:at(key)
+  end
+}
+
+function M.sparse_map(top, left, width, height)
+  local map = {_top = top + 0, _left = left + 0, _width = width + 0, _height = height + 0}
+  t.add(map, sparse_map_methods)
+  setmetatable(map, sparse_map_meta)
+  return map
+end
+
 return M
