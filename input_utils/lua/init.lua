@@ -1,5 +1,25 @@
 local M = {}
 
+local function read_lines_raw(filename, f)
+  for line in io.lines(filename) do
+    f(line)
+  end
+end
+
+local function read_lines_with_pattern(filename, pattern, f)
+  for line in io.lines(filename) do
+    f(line:match(pattern))
+  end
+end
+
+function M.read_lines(filename, f_or_pattern, f)
+  if type(f_or_pattern) == "string" then
+    return read_lines_with_pattern(filename, f_or_pattern, f)
+  else
+    return read_lines_raw(filename, f_or_pattern)
+  end
+end
+
 function M.read_numbers(filename, f)
   for line in io.lines(filename) do
     for n in line:gmatch("([0-9]+)") do
