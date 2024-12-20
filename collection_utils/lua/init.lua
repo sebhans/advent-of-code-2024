@@ -1,6 +1,14 @@
 local t = require('table_utils.lua')
 local M = {}
 
+function M.shallow_copy_array(a)
+  local copy = {}
+  for i, v in ipairs(a) do
+    copy[i] = v
+  end
+  return copy
+end
+
 local set_methods = {
   add = function(self, value)
     self[value] = true
