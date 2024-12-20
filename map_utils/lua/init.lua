@@ -73,6 +73,18 @@ local matrix_map_methods = {
 
   put_coord = function(self, c, element) return self:put(c.x, c.y, element) end,
   put_key = function(self, key, element) return self:put(M.coord(key), element) end,
+
+  scan = function(self, actions)
+    for y, row in ipairs(self) do
+      for x, c in ipairs(row) do
+        for target, action in pairs(actions) do
+          if c == target then
+            action(M.coord(x, y))
+          end
+        end
+      end
+    end
+  end
 }
 
 local matrix_map_meta = {
