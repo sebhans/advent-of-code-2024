@@ -7,6 +7,22 @@ function M.add(t1, t2)
   return t1
 end
 
+function M.clone(t)
+  local copy = {}
+  for k, v in pairs(t) do
+    local kc, vc = k, v
+    if type(k) == "table" then
+      kc = M.clone(k)
+    end
+    if type(v) == "table" then
+      vc = M.clone(v)
+    end
+    copy[kc] = vc
+  end
+  setmetatable(copy, getmetatable(t))
+  return copy
+end
+
 function M.cut_matrix(t, x1, y1, x2, y2)
   local slice = {}
   for y = y1, y2 do
