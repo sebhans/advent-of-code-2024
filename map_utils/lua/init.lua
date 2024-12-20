@@ -58,7 +58,21 @@ local matrix_map_methods = {
       return M.coord(x, y)
     end
     return next_coordinate, self, nil
-  end
+  end,
+
+  put = function(self, x, y_or_element, element)
+    if not element then
+      if type(x) == "string" then return self:put_key(x, y_or_element)
+      elseif type(x) == "number" then return
+      else return self:put_coord(x, y_or_element)
+      end
+    elseif x < 1 or y_or_element < 1 or x > self:width() or y_or_element > self:height() then return nil
+    else self[y_or_element][x] = element
+    end
+  end,
+
+  put_coord = function(self, c, element) return self:put(c.x, c.y, element) end,
+  put_key = function(self, key, element) return self:put(M.coord(key), element) end,
 }
 
 local matrix_map_meta = {
