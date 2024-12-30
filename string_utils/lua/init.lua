@@ -8,4 +8,14 @@ function M.extract(s, pattern)
   return parts
 end
 
+function M.starts_with(s, prefix)
+  if #s < #prefix then
+    return false
+  end
+  if #s == #prefix and s == prefix then
+    return true
+  end
+  return string.sub(s, 1, #prefix) == prefix
+end
+
 return M

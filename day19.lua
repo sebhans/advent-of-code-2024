@@ -31,3 +31,35 @@ for _, design in ipairs(designs) do
   end
 end
 print(num_possible)
+
+local count_combinations
+local function cc(design)
+  if design == '' then
+    return 1
+  end
+  local n = 0
+  for _, pattern in ipairs(available_patterns) do
+    if s.starts_with(design, pattern) then
+      n = n + count_combinations(string.sub(design, #pattern + 1))
+    end
+  end
+  return n
+end
+
+local combinations = {}
+count_combinations = function(design)
+  if combinations[design] then
+    return combinations[design]
+  end
+  local n = cc(design)
+  combinations[design] = n
+  return n
+end
+
+local n = 0
+for _, design in ipairs(designs) do
+  if valid_design:match(design) then
+    n = n + count_combinations(design)
+  end
+end
+print(n)
