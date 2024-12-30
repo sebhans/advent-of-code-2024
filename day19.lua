@@ -1,3 +1,4 @@
+local f = require('function_utils.lua')
 local i = require('input_utils.lua')
 local regex = require('regex')
 local s = require('string_utils.lua')
@@ -46,15 +47,7 @@ local function cc(design)
   return n
 end
 
-local combinations = {}
-count_combinations = function(design)
-  if combinations[design] then
-    return combinations[design]
-  end
-  local n = cc(design)
-  combinations[design] = n
-  return n
-end
+count_combinations = f.memoize(cc)
 
 local n = 0
 for _, design in ipairs(designs) do
