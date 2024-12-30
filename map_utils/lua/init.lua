@@ -7,6 +7,7 @@ local coordinate_methods = {
   down = function(self) return M.coord(self.x, self.y + 1) end,
   left = function(self) return M.coord(self.x - 1, self.y) end,
   right = function(self) return M.coord(self.x + 1, self.y) end,
+  translate = function(self, dx, dy) return M.coord(self.x + dx, self.y + dy) end,
 }
 
 local coordinate_meta = {
@@ -97,6 +98,19 @@ function M.matrix_map(matrix)
   t.add(matrix, matrix_map_methods)
   setmetatable(matrix, matrix_map_meta)
   return matrix
+end
+
+function M.empty_matrix_map(width, height, tile)
+  if not tile then tile = '.' end
+  local map = {}
+  for y = 1, height do
+    local row = {}
+    for x = 1, width do
+      row[x] = tile
+    end
+    map[y] = row
+  end
+  return M.matrix_map(map)
 end
 
 return M
