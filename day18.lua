@@ -38,3 +38,39 @@ while not finished do
   end
 end
 print(steps)
+
+local function have_free_path(map)
+  local heads = { m.coord(1, 1) }
+  local finished = false
+  local visited = c.empty_set()
+  visited:add(heads[1])
+  while heads[1] do
+    local head = table.remove(heads, 1)
+    if head.x == dimension and head.y == dimension then
+      return true
+    else
+      local function try(coord)
+        local k = coord:key()
+        if map:at(coord) == '.' and not visited:contains(k) then
+          table.insert(heads, coord)
+          visited:add(k)
+        end
+      end
+      try(head:left())
+      try(head:right())
+      try(head:up())
+      try(head:down())
+    end
+  end
+  return false
+end
+
+map = m.empty_matrix_map(dimension, dimension)
+i.read_lines('input/day18.txt', function(line)
+  map:put(m.coord(line):translate(1, 1), '#')
+  if not have_free_path(map) then
+    print(line)
+    os.exit()
+  end
+end)
+
