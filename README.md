@@ -6,6 +6,7 @@ This repository contains my solutions to the puzzles of [Advent of Code 2024](ht
 
 * Lua 5.4.7
 * [LPeg](https://www.inf.puc-rio.br/~roberto/lpeg/) 1.1.0-2
+* [lua-regex](https://github.com/mah0x211/lua-regex) 0.2.0-1
 
 ## Running
 
