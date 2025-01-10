@@ -11,6 +11,11 @@ local coordinate_methods = {
 }
 
 local coordinate_meta = {
+  __eq = function(self, other)
+    if type(other) == "string" then return self == M.coord(other)
+    else return self.x == other.x and self.y == other.y
+    end
+  end,
   __tostring = function(self) return self:key() end,
 }
 
