@@ -7,6 +7,13 @@ function M.add(t1, t2)
   return t1
 end
 
+function M.append_all(t1, t2)
+  for _, v in ipairs(t2) do
+    t1[#t1 + 1] = v
+  end
+  return t1
+end
+
 function M.clone(t)
   local copy = {}
   for k, v in pairs(t) do
@@ -33,6 +40,23 @@ function M.cut_matrix(t, x1, y1, x2, y2)
     slice[#slice + 1] = row
   end
   return slice
+end
+
+function M.min_by(t, selector)
+  local min, min_s = nil, nil
+  for _, v in ipairs(t) do
+    if min == nil then
+      min = v
+      min_s = selector(v)
+    else
+      local s = selector(v)
+      if s < min_s then
+        min = v
+        min_s = s
+      end
+    end
+  end
+  return min
 end
 
 function M.size(t)
