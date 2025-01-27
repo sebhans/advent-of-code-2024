@@ -18,6 +18,15 @@ local set_methods = {
     return self[value]
   end,
 
+  contains_all = function(self, other)
+    for value in other:elements() do
+      if not self:contains(value) then
+        return false
+      end
+    end
+    return true
+  end,
+
   elements = function(self)
     local function next_element(set, index)
       local k, v = index, nil
@@ -40,6 +49,14 @@ local set_methods = {
     end
     return self
   end,
+
+  to_array = function(self)
+    local a = M.empty_set()
+    for e in self:elements() do
+      a[#a + 1] = e
+    end
+    return a
+  end
 }
 
 function set_methods.size(self) return t.size(self) - t.size(set_methods) end

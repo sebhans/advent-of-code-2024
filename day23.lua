@@ -33,3 +33,42 @@ for computer, connected in pairs(connections) do
   end
 end
 print(t.size(parties))
+
+local fully_connected = {}
+for computer, _ in pairs(connections) do
+  fully_connected[computer] = c.set(computer)
+end
+for computer, connected in pairs(connections) do
+  local party = fully_connected[computer]
+  for candidate in connected:elements() do
+    if not party:contains(candidate) then
+      if connections[candidate] and connections[candidate]:contains_all(party) then
+        party:add(candidate)
+        for participant in party:elements() do
+          fully_connected[participant] = party
+        end
+      end
+    end
+  end
+end
+
+local largest_party = nil
+local largest_size = 0
+for _, party in pairs(fully_connected) do
+  if party:size() > largest_size then
+    largest_party = party
+    largest_size = party:size()
+  end
+end
+local largest_party_computers = largest_party:to_array()
+table.sort(largest_party_computers)
+local first = true
+for _, computer in ipairs(largest_party_computers) do
+  if not first then
+    io.write(',')
+  else
+    first = false
+  end
+  io.write(computer)
+end
+print()
